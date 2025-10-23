@@ -18,3 +18,24 @@ def news_detail(request, id):
         "news": news,
     }
     return render(request, 'news/news_detail.html', context)
+
+def homePageView(request):
+    news = News.published.all()
+    categories = Category.objects.all()
+    context = {
+        'news': news,
+        'categories': categories
+    }
+    return render(request, 'news/home.html', context)
+
+def contactPageView(request):
+    context = {}
+    return render(request, 'news/contact.html', context)
+
+def categoryPageView(request):
+    context = {}
+    return render(request, 'news/category.html', context)
+
+def singlePageView(request):
+    context = {}
+    return render(request, 'news/single.html', context)
