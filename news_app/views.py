@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import TemplateView
+
 from .models import News, Category
 from .forms import ContactForm
 # Create your views here.
@@ -22,23 +24,47 @@ def news_detail(request, id):
     return render(request, 'news/news_detail.html', context)
 
 def homePageView(request):
-    news = News.published.all()
+    news = News.published.all().order_by('-publish_time')
     categories = Category.objects.all()
     context = {
-        'news': news,
+        'news_list': news_list,
         'categories': categories
     }
     return render(request, 'news/home.html', context)
 
-def contactPageView(request):
-    form = ContactForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return HttpResponse("<h2> Biz bilan bogʻlanganingiz uchun rahmat </h2>")
-    context = {
-        'form': form
-    }
-    return render(request, 'news/contact.html', context)
+# def contactPageView(request):
+#     form = ContactForm(request.POST or None)
+#     success_message = None
+#
+#     if request.method == "POST" and form.is_valid():
+#         form.save()
+#         success_message = "Biz bilan bogʻlanganingiz uchun rahmat! Tez orada sizga javob beramiz."
+#         form = ContactForm()  # Clear form after successful submission
+#
+#     context = {
+#         'form': form,
+#         'success_message': success_message
+#     }
+#     return render(request, 'news/contact.html', context)
+
+class ContactPageView(TemplateView):
+    template_name = 'news/contact.html'
+
+    def get(self, request, *args, **kwargs):
+        form = ContactForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'news/contact.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = ContactForm(request.POST)
+        if request.method == 'POST' and form.is_valid():
+            form.save()
+            return HttpResponse("Thank you for contacting us.")
+
+        return render(request, 'news/contact.html', {'form': form})
+
 
 def categoryPageView(request):
     context = {}
