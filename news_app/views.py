@@ -27,7 +27,7 @@ def homePageView(request):
     news = News.published.all().order_by('-publish_time')
     categories = Category.objects.all()
     context = {
-        'news_list': news_list,
+        'news_list': news,
         'categories': categories
     }
     return render(request, 'news/home.html', context)
