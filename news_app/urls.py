@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import news_list, news_detail, homePageView, contactPageView, categoryPageView, singlePageView
+from .views import (news_list, news_detail, homePageView,
+                    contactPageView, categoryPageView,
+                    singlePageView, basePageView)
 
 urlpatterns = [
     path('', homePageView, name='home_page'),
@@ -8,4 +10,5 @@ urlpatterns = [
     path('contact/', contactPageView, name='contact'),
     path('category/', categoryPageView, name='category'),
     path('single/', singlePageView, name='single'),
+    path('base/', basePageView, name='base'),
 ]

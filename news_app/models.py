@@ -1,15 +1,18 @@
 from django.utils import timezone
 from django.db import models
 
+
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status=News.Status.Published)
+
 
 class Category(models.Model):
     title = models.CharField(max_length=100)
 
     def __str__(self):
         return self.title
+
 
 class News(models.Model):
     class Status(models.TextChoices):
@@ -36,3 +39,11 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
+
+class Contact(models.Model):
+    name = models.CharField(max_length=150)
+    email = models.EmailField(max_length=150)
+    message = models.TextField(max_length=1000)
+
+    def __str__(self):
+        return self.name
